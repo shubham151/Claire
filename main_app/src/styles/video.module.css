@@ -1,0 +1,43 @@
+.video-previews {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.video-preview {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 10px;
+    width: 100%; /* Ensure the items span the full width */
+}
+
+.video-preview video {
+    flex-basis: 45%; /* Adjusts the video size relative to container */
+    max-width: 45%; /* Ensures the video does not overflow */
+}
+
+.video-preview p {
+    flex-basis: 45%; /* Same width for the transcript */
+    margin-left: 10px; /* Add space between video and transcript */
+    word-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+    .video-preview {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .video-preview video, .video-preview p {
+        flex-basis: 100%; /* On small screens, stack video and text */
+        max-width: 100%;
+    }
+
+    .video-preview p {
+        margin-left: 0; /* Reset margin for mobile view */
+    }
+}
+
