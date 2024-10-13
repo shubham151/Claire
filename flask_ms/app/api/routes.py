@@ -4,11 +4,11 @@ import re
 import os
 import time
 import json
-from app.services import createIndex, uploadVideoToIndex, download_tiktok_video
+from app.services import createIndex, uploadVideoToIndex, download_tiktok_video, search_query, rename_video
 
-UPLOAD_DIR = '/home/spidermines/Projects/Claire/main_app/public/uploads/'
-INDEX_NAME='zeitgeist_sm_color'
-INDEX_ID='670b36a7e2f5d6a324a6b710'
+UPLOAD_DIR = '/home/spidermines/Projects/Zeitgeist/main_app/public/uploads/'
+INDEX_NAME='zeitgeist_sm'
+INDEX_ID='670b5730e2f5d6a324a6b919'
 
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
@@ -25,9 +25,12 @@ def download_video():
     data = request.get_json()
     video_url = re.sub(r'\?.*', '', data.get('url'))
     try:
+        
         filename = download_tiktok_video(video_url, UPLOAD_DIR)
-        uploadVideoToIndex(filename, INDEX_ID)
-        return jsonify({"message": "Document saved successfully"}), 200
+
+        videoId = uploadVideoToIndex(filename, INDEX_ID)
+        rename_video(filename, f"{UPLOAD_DIR}{videoId}")
+        return jsonify({"message": f"{video_url} saved and uploaded successfully"}), 200
 
     except:
         print("Failed to Download")
@@ -40,6 +43,13 @@ def create_tlIndex():
     return jsonify({"message": f"{INDEX_NAME} created successfully"}), 200
 
 
-
+@api_blueprint.route('/search_query', methods=['POST'])
+def search_f_index():
+    data = request.get_json()
+    query = data.get('label')
+    top_cnt = data.get('top_count')
+    res = search_query(INDEX_ID, query, top_cnt, UPLOAD_DIR)
+    print(res)
+    return jsonify({'resp': res}), 200
 
 

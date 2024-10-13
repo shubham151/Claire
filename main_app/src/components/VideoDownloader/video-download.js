@@ -2,18 +2,15 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, ListGroup, Row, Col  } from "react-bootstrap";
 import styles from '@/styles/video.module.css';
-// import { useLoading } from "@/app/Loading";
 
 const defaultUrl = `http://${window.location.hostname}:3000/uploads/`;
 
 const TikTokDownloader = ({  }) => {
   const [videoUrl, setVideoUrl] = useState("");
   const [downloadedVideos, setDownloadedVideos] = useState([]);
-//   const { setIsLoading } = useLoading();
 
   const fetchDownloadedVideos = async () => {
     try {
-    //   setIsLoading(true)
       const response = await fetch("/api/get-downloaded-videos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -23,14 +20,10 @@ const TikTokDownloader = ({  }) => {
         throw new Error(`Error: ${response.status}`);
       }
       const videos = await response.json();
-      console.log(videos)
       setDownloadedVideos(videos.files);
     } catch (error) {
       console.error("Failed to fetch videos:", error);
-    } finally {
-    //   setIsLoading(false)
     }
-    
   };
 
   useEffect(() => {
@@ -41,7 +34,6 @@ const TikTokDownloader = ({  }) => {
     if (!videoUrl) return;
 
     try {
-    //   setIsLoading(true)
       const response = await fetch("/api/download-video", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -58,56 +50,62 @@ const TikTokDownloader = ({  }) => {
       fetchDownloadedVideos();
     } catch (error) {
       console.error("Failed to download video:", error);
-    } finally {
-    //   setIsLoading(false)
     }
   };
 
-
   return (
-    <div className="p-4 border rounded shadow-sm">
-      <div className="row align-items-center mb-3">
-        <label className="form-label col-12 mb-2">Enter TikTok Video URL</label>
-        <div className="col-10">
-          <input
-            type="text"
-            className="form-control mb-3"
-            placeholder="https://www.tiktok.com/..."
-            value={videoUrl}
-            onChange={(e) => setVideoUrl(e.target.value)}
+    <div className={styles.app}>
+      <div className={styles.videoBg}>
+        <video autoPlay loop muted>
+          <source
+            src="https://assets.codepen.io/3364143/7btrrd.mp4"
+            type="video/mp4"
           />
-        </div>
-        <div className="col-2 text-end">
-          <button onClick={handleDownload} className="btn btn-primary mb-3">
-            Download Video
-          </button>
-        </div>
+          Your browser does not support the video tag.
+        </video>
       </div>
 
-      <h5>Downloaded Videos</h5>
+      <div className={styles.container}>
+        <h1 className={styles.title}>TikTok Video Downloader</h1>
 
-      <div className={`${styles['video-previews']} mt-3`}>
-        {downloadedVideos?.length > 0 ? (
-          <div className="list-group">
-            {downloadedVideos.map((video, index) => (
-              <div
-                key={index}
-                className="d-flex justify-content-between align-items-start mb-2"
-              >
-                <div >
-                  <video
-                    controls
-                    width="30%"
-                    src={defaultUrl + video}
-                    // style={{ marginRight: "10px" }}
-                  />
-                </div>
-              </div>
-            ))}
+        <form onSubmit={(e) => {e.preventDefault(); handleDownload();}} className={styles.form}>
+          <div className="mb-3">
+            <label className="form-label" htmlFor="videoUrlInput">
+              Enter TikTok Video URL
+            </label>
+            <input
+              type="text"
+              id="videoUrlInput"
+              className="form-control"
+              placeholder="https://www.tiktok.com/..."
+              value={videoUrl}
+              onChange={(e) => setVideoUrl(e.target.value)}
+            />
           </div>
-        ) : (
-          <p>No videos downloaded yet.</p>
-        )}
+
+          <Button type="submit" className="btn btn-primary">
+            Download Video
+          </Button>
+        </form>
+
+        <h5 className="mt-4">Downloaded Videos</h5>
+
+        <div className={`${styles['video-previews']} mt-3`}>
+          {downloadedVideos.length > 0 ? (
+            <div className="d-flex flex-wrap justify-content-center ">
+              {downloadedVideos.map((video, index) => (
+                <div
+                  key={index}
+                  className={`container-flex ${styles['container-flex1']}`}
+                >
+                  <video controls width="240" height="480" src={defaultUrl + video}/>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>No videos downloaded yet.</p>
+          )}
+        </div>
       </div>
     </div>
   );

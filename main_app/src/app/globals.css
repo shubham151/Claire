@@ -1,6 +1,21 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --theme-bg-color: rgba(16, 18, 27, 0.4);
+    --border-color: rgba(113, 119, 144, 0.25);
+    --theme-color: #f9fafb;
+    --inactive-color: rgba(113, 119, 144, 0.78);
+    --hover-menu-bg: rgba(12, 15, 25, 0.3);
+    --content-title-color: #999ba5;
+    --content-bg: rgba(146, 151, 179, 0.13);
+    --button-inactive: rgba(249, 250, 251, 0.55);
+    --dropdown-bg: #21242d;
+    --dropdown-hover: rgb(42, 46, 60);
+    --popup-bg: rgb(22, 25, 37);
+    --search-bg: #14162b;
+    --overlay-bg: rgba(36, 39, 59, 0.3);
+    --scrollbar-bg: rgba(1, 2, 3, 0.4);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -13,7 +28,11 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
+
+
+    
+  
 }
 
 body {
