@@ -22,12 +22,14 @@ export default function Home() {
   const [topCount, setTopCount] = useState(5);
   const [results, setResults] = useState([]);
   const [lightMode, setLightMode] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       // Make the API call here to fetch recent documents
+      setLoading(true)
       const response = await fetch("/api/fetch-response", {
         method: "POST",
         headers: {
@@ -48,6 +50,8 @@ export default function Home() {
       }
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+        setLoading(false)
     }
 
     // Remove or comment out the following block if not needed
@@ -116,7 +120,7 @@ export default function Home() {
                 Top Count:
               </label>
               <input
-                type="number"
+                type="text"
                 className="form-control"
                 id="topCountInput"
                 value={topCount}
@@ -124,12 +128,12 @@ export default function Home() {
                 min="1"
               />
             </div>
-            <button type="submit" className="btn btn-primary">
-              Analyze
+            <button type="submit" className="btn btn-primary " disabled={loading} >
+            {loading ? 'Analyzing...' : 'Analyze'}
             </button>
           </form>
 
-          {results.length > 0 && (
+          {results.length > 0  ? (
             
             <div className={styles.results}>
               <h2>Top {topCount} Colors:</h2>
@@ -138,11 +142,11 @@ export default function Home() {
                 
                   <div className="col-md-4 mb-4" key={color}>
                     
-                    <div className={`card`}>
+                    <div className={`card ${styles.colorCard}`}>
                       <div
                         className=""
                         style={{
-                          backgroundColor: color + ' !important', 
+                          backgroundColor: color , 
                           height: "150px",
                         }}
                       ></div>
@@ -155,7 +159,7 @@ export default function Home() {
                 ))}
               </div>
             </div>
-          )}
+          ): (loading ? "Analyzing....":"No data found.....")}
         </div>
       </div>
     </div>

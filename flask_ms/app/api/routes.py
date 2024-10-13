@@ -49,6 +49,8 @@ def search_f_index():
     query = data.get('label')
     top_cnt = data.get('top_count')
     res = search_query(INDEX_ID, query, top_cnt, UPLOAD_DIR)
+    if(res == None):
+        res = []
     print(res)
     return jsonify({'resp': res}), 200
 

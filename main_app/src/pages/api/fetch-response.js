@@ -19,8 +19,15 @@ export default async function handler(req, res) {
         return res.status(flaskResponse.status).json({ error: "Failed to download video" });
       }
 
-      const data = await flaskResponse.json();
+      let data = await flaskResponse.json();
 
+        
+    //   let data = {}
+    //   data.resp = [
+    //     {color: '#e31c0e', count: 426 },
+    //     {color: '#e8e4e3', count: 322 },
+    //     {color: '#FFFFF0', count: 59 }
+    //   ]
       const { resp } = data;
       console.log(resp)
       
